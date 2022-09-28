@@ -1,10 +1,10 @@
-const CustomAPIError = require('../errors/custom-error')
+const { UnAuthenticatedError } = require('../errors')
 const jwt = require('jsonwebtoken')
 
 const authenticationMiddleware = async (req, res, next) => {
     const { authorization } = req.headers
     if (!authorization || !authorization.startsWith('Bearer ')) {
-        throw new CustomAPIError('No authorization token received', 401)
+        throw new UnAuthenticatedError('No authorization token received')
     }
     const token = authorization.split(' ')[1]
     console.log("authenticationMiddleware token: " + token);
@@ -16,7 +16,7 @@ const authenticationMiddleware = async (req, res, next) => {
         next()
     } catch (error) {
         console.log(error);
-        throw new CustomAPIError('invalid authorization information', 401)
+        throw new UnAuthenticatedError('invalid authorization information')
     }
 }
 
